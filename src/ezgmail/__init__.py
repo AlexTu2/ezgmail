@@ -605,7 +605,30 @@ def send(recipient, subject, body, attachments=None, sender=None, cc=None, bcc=N
         msg = _createMessageWithAttachments(sender, recipient, subject, body, attachments, cc, bcc, mimeSubtype, _threadId=_threadId)
     _sendMessage(msg)
 
+def draft(recipient, subject, body, attachments=None, sender=None, cc=None, bcc=None, mimeSubtype="plain", _threadId=None):
+    """Drafts an email from the configured Gmail account.
 
+    Note that the ``sender`` argument seems to be ignored by Gmail, which uses the account's actual email address.
+
+    TODO - Add additional details to this docstring."""
+    if not isinstance(mimeSubtype, str):
+        raise EZGmailTypeError('wrong type passed for mimeSubtype arg; must be "plain" or "html"')
+    mimeSubtype = mimeSubtype.lower()
+    if mimeSubtype not in ("html", "plain"):
+        raise EZGmailValueError('wrong string passed for mimeSubtype arg; mimeSubtype arg must be "plain" or "html"')
+
+    if SERVICE_GMAIL is None:
+        init()
+
+    if sender is None:
+        sender = EMAIL_ADDRESS
+
+    if attachments is None:
+        msg = _createMessage(sender, recipient, subject, body, cc, bcc, mimeSubtype, _threadId=_threadId)
+    else:
+        msg = _createMessageWithAttachments(sender, recipient, subject, body, attachments, cc, bcc, mimeSubtype, _threadId=_threadId)
+    _createDraft(msg)
+ 
 def search(query, maxResults=25, userId="me"):
     """Returns a list of GmailThread objects that match the search query.
 
