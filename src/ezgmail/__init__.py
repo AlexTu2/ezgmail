@@ -489,7 +489,7 @@ def _createMessage(sender, recipient, subject, body, cc=None, bcc=None, mimeSubt
 
     message = MIMEText(body, mimeSubtype)
     message["to"] = recipient
-    message["from"] = sender
+    #message["from"] = sender
     message["subject"] = subject
     if cc is not None:
         message["cc"] = cc
@@ -523,7 +523,7 @@ def _createMessageWithAttachments(sender, recipient, subject, body, attachments,
 
     message = MIMEMultipart()
     message["to"] = recipient
-    message["from"] = sender
+    #message["from"] = sender
     message["subject"] = subject
     if cc is not None:
         message["cc"] = cc
